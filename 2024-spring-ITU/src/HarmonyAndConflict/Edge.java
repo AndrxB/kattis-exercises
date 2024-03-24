@@ -3,11 +3,10 @@ package HarmonyAndConflict;
 import java.util.List;
 
 public abstract class Edge {
-    private Type type;
-    private boolean marked;
-    private List<Edge> adjecentEdges;
-    public Edge(int type){
-        this.type = Type.getType(type);
-        marked = false;
+    private Node from;
+    private Node to;
+    public Edge(Node from, Node to){
+        this.from = from;
+        this.to = to;
     }
 }
