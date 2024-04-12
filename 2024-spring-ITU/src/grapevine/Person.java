@@ -1,7 +1,7 @@
 package grapevine;
 
-import java.util.ArrayList;
-import java.util.List;
+
+import java.util.*;
 
 public class Person {
     private String name;
@@ -9,7 +9,8 @@ public class Person {
     private boolean isConvinced;
     private boolean marked;
     private int heard;
-    List<Person> heardFrom;
+    Set<Person> heardFrom;
+    List<Person> adj;
 
 
     public Person(String name, int skepticism){
@@ -18,7 +19,7 @@ public class Person {
         this.name = name;
         this.skepticism = skepticism;
         adj = new ArrayList<>();
-        heardFrom = new ArrayList<>();
+        heardFrom = new HashSet<>();
         marked = false;
     }
 
@@ -29,6 +30,7 @@ public class Person {
     }
     public void update(Person person){
         heardFrom.add(person);
+        marked = true;
     }
 
     public void addEdge(Person person){
@@ -43,7 +45,7 @@ public class Person {
     }
     @Override
     public String toString(){
-        return this.name + " " + isConvinced;
+        return this.name + " " + getIsConvinced();
     }
 
     public void display(){

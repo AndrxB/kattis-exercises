@@ -1,5 +1,6 @@
 package grapevine;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Scanner;
 
@@ -11,15 +12,17 @@ public class Grapevine {
         int m_connections = sc.nextInt(); // a tells b
         int d_days = sc.nextInt(); // days until doom
 
-        Graph g = new Graph();
+        Graph g = new Graph(n_lines);
 
         for (int i = 0; i < n_lines; i++) {
-            new Person(sc.next(), sc.nextInt());
+            g.people.add(new Person(sc.next(), sc.nextInt()));
         }
 
         for (int i = 0; i < m_connections; i++) {
-            Person p = g.get(sc.next());
-            Person q = g.get(sc.next());
+            String pn = sc.next();
+            String qn = sc.next();
+            Person p = g.get(pn);
+            Person q = g.get(qn);
             p.addEdge(q);
         }
 
@@ -27,31 +30,32 @@ public class Grapevine {
 
         DepthFirstSearch dfs = new DepthFirstSearch(d_days);
 
-        System.out.println(dfs.dfs(start, 0));
+        int heard = 0;
+
+        int counter = 1;
+
+        while (d_days >= counter){
+            heard = dfs.dfs(start).size();
+            counter++;
+        }
+
+
+        System.out.println(heard);
 
     }
 
     public static class Graph {
-        Person[] people;
-        Edge[] edges;
+        List<Person> people;
 
-        public Graph(int n_people, int m_edges){
-            people = new Person[n_people];
-            edges = new Edge[m_edges];
-        }
-        public List<Person> getAdj(Person person){
-            List<Person> list = new ArrayList<>();
-
-            for (Edge edge : edges)
-                if(edge.getFrom().equals("name"))
-                    list.add(edge.getTo());
-
-            return list;
+        public Graph(int n_people){
+            people = new ArrayList<>();
         }
 
-        public Person getPerson(){
-            for()
-                if()
+        public Person get(String name){
+            for(Person p : people)
+                if(name.equals(p.getName()))
+                    return p;
+            return null;
         }
     }
 

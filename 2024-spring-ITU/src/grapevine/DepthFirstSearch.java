@@ -1,4 +1,5 @@
 package grapevine;
+import java.util.*;
 
 public class DepthFirstSearch {
     int days;
@@ -7,26 +8,27 @@ public class DepthFirstSearch {
         this.days = days;
     }
 
-    public int dfs(Person current, int counter){
-        if(counter > days || current.getIsConvinced()) {
-            return 0; // Return 0 if current person is convinced or counter exceeds days
-        }
+    HashSet<Person> heard = new HashSet<>();
+
+    public HashSet<Person> dfs(Person current){
+        //System.out.println(heard);
+
 
         current.setMarked();
-        int heard = 0;
-
-        // Check if the current person is skeptical enough to spread the rumor
-        if (current.getSkepticism() == 0 || current.heardFrom.size() >= current.getSkepticism()) {
-            heard++;
-        }
+        //System.out.println(current + " " + counter)
 
         // Traverse adjacent nodes
         for (Person adj : current.getAdj()) {
-            if (!adj.getMarked()) {
-                adj.update(current); // Update that the current person heard the rumor from 'adj'
-                heard += dfs(adj, counter + 1);
+            // Check if the current person is skeptical enough to spread the rumor
+            if(adj.getIsConvinced()) {
+                heard = dfs(adj);
             }
+            heard.add(adj);
+            adj.update(current); // Update that the current person heard the rumor from 'adj'
         }
+
+
+        //System.out.println(current + " " + heard);
 
         return heard;
     }
