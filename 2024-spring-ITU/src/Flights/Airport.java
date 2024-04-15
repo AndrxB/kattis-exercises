@@ -1,95 +1,52 @@
 package Flights;
 
-
+import java.time.LocalTime;
 import java.util.*;
 
+
 public class Airport {
-    TreeMap<Integer, Flight> flights;
-    String[] operations;
-    public Airport(int m_operations){
-        flights = new TreeMap<>();
-        operations = new String[m_operations];
+    public static TreeMap<Integer, String> flights = new TreeMap<>();
+    public static Map<String, Integer> input2Seconds = new HashMap<>();
+    public static void cancel(String time){
+        flights.remove(timeConvert(time));
     }
-    public void addOperation(String operation){
-        operations[operations.length == 0 ? 0 : operations.length-1] = operation;
-    }
-    public String nextDeparture(String departure){
-        String nextDeparture = "";
 
-        // Find the next departure after the given time
-        int departureTime = time2Seconds(departure);
-        Map.Entry<Integer, Flight> entry = flights.higherEntry(departureTime);
-        if (entry != null) {
-            nextDeparture = entry.getValue().getDeparture().toString();
-        } else {
-            // If no next departure is found, check if there is a departure at the given time
-            Flight flight = flights.get(departureTime);
-            if (flight != null) {
-                nextDeparture = flight.getDeparture().toString();
-            }
+    public static int timeConvert(String str) {
+        if (!input2Seconds.containsKey(str)) {
+            input2Seconds.put(str, LocalTime.parse(str).toSecondOfDay());
         }
-
-        return nextDeparture;
+        return input2Seconds.get(str);
     }
-
-
-    public void queueOperation(String operation){
-        String[] newOperation = operation.split(" ");
-        try {
-            switch (newOperation[0]){
-                case "cancel" -> get(newOperation[1]).cancellation();
-                case "delay" -> get(newOperation[1]).getDeparture().delays(Integer.parseInt(newOperation[2]));
-                case "reroute" -> get(newOperation[1]).reRoute(newOperation[2]);
-                case "destination" -> print(get(newOperation[1]));
-                case "next" -> System.out.println(nextDeparture(newOperation[1]));
-                case "count" -> System.out.println(countFlights(newOperation[1], newOperation[2]));
-            }
-        } catch (Exception e){
-            System.out.println();
+    static void delay(String str, String delay) {
+        int originalTime = timeConvert(str);
+        String flight = Airport.flights.remove(originalTime);
+        if (flight != null) {
+            Airport.flights.put(originalTime + Integer.parseInt(delay), flight);
         }
     }
 
-    public void print(Flight flight){
-        if(flight.getRoute() == null) return;
-        else System.out.println(flight);
+    static String count(String time1, String time2) {
+        return String.valueOf(Airport.flights.subMap(timeConvert(time1), true, timeConvert(time2), true).keySet().size());
     }
 
-    public void addFlight(String departure, Flight flight){
-        int departureTime = time2Seconds(departure);
-        flights.put(departureTime, flight);
+    static void reroute(String time, String location) {
+        Airport.flights.put(timeConvert(time), location);
     }
 
-    public Flight get(String HHMMSS){
-        for(Flight flight : flights.values()){
-            if(flight.getDeparture().toString().equals(HHMMSS))
-                return flight;
-        }
-
-        return new Flight(null, null);
+    static String destination(String str) {
+        String output = Airport.flights.get(timeConvert(str));
+        return output == null ? "-" : output;
     }
 
-    public int countFlights(String from, String to){
-        int count = 0;
-        int departureFrom = time2Seconds(from);
-        int departureTo = time2Seconds(to);
-
-        for (int time : flights.keySet()) {
-            if (time >= departureFrom && time <= departureTo) {
-                Flight flight = flights.get(time);
-                if (flight.isActive()) {
-                    count++;
-                }
-            }
-        }
-
-        return count;
+    static String next(String time) {
+        Integer value = Airport.flights.ceilingKey(timeConvert(time));
+        return value == null ? "-" : formatSecondsToHMS(value) + " " + Airport.flights.get(value);
     }
 
-    public static int time2Seconds(String input) {
-        String[] in = input.split(":");
-        int inSec = Integer.parseInt(in[2]);
-        int inMin = Integer.parseInt(in[1]);
-        int inHour = Integer.parseInt(in[0]);
-        return inHour * 3600 + inMin * 60 + inSec;
+    public static String formatSecondsToHMS(long totalSeconds) {
+        long hours = totalSeconds / 3600;
+        long minutes = (totalSeconds % 3600) / 60;
+        long seconds = totalSeconds % 60;
+        return String.format("%02d:%02d:%02d", hours, minutes, seconds);
     }
 }
