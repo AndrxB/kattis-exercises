@@ -4,33 +4,27 @@ package grapevine;
 import java.util.*;
 
 public class Person {
-    private String name;
-    private int skepticism;
-    private boolean isConvinced;
+    private final String name;
+    private final int skepticism;
     private boolean marked;
-    private int heard;
     Set<Person> heardFrom;
     List<Person> adj;
 
 
     public Person(String name, int skepticism){
-        this.isConvinced = skepticism == 0;
-        this.heard = 0;
         this.name = name;
         this.skepticism = skepticism;
         adj = new ArrayList<>();
         heardFrom = new HashSet<>();
-        marked = false;
     }
 
     public String getName(){ return name; }
 
     public boolean getIsConvinced(){
-        return skepticism <= heardFrom.size();
+        return heardFrom.size() >= skepticism;
     }
     public void update(Person person){
         heardFrom.add(person);
-        marked = true;
     }
 
     public void addEdge(Person person){
