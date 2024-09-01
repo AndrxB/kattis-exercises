@@ -1,0 +1,32 @@
+Opgave 2.3: Hvad er typen af s i compile time (dvs. den statiske type)? Og hvad er typen af s i runtime (dvs. den
+dynamiske type), hvis programmet køres på en onsdag?
+
+Storage s;
+
+if(isFriday()){
+    s = new FixedPriceStorage();
+} else {
+    s = new ScalablePriceStorage
+}
+
+Den statiske type er Storage eftersom at det er superklassen;
+De dynamiske typer, afhænger om isFriday == true;
+
+if(true){
+    dynamisk type: FixedPriceStorage();
+} else {
+    dynamisk type: ScalablePriceStorage();
+}
+// -------------------------------------------------------------------------------------------------------------- //
+
+Opgave 2.4: Hvis man kalder s.display(), hvilken display()-metode vil så blive kørt?;
+
+Dette afhænger igen om isFriday == true;
+
+if(true){
+    display-metoden fra superklassen Storage;
+} else {
+    eftersom vi har @Override'et metoden i ScalablePriceStorage(),
+    som originalt arvede metoden fra dens superklasse Storage,
+    så vil display metoden blive kaldt fra ScalablePriceStorage();
+}

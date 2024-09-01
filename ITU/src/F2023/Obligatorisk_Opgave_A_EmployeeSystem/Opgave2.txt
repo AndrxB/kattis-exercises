@@ -1,0 +1,34 @@
+Grundlæggende Programmering E2020
+Obligatorisk opgave A
+Employee System
+
+André Racraquin Birk // 1. Semester F2023
+
+Opgave 2.3)
+___________________________________________________________________________________________________
+
+    Employee e ;
+
+    if ( isFriday () ) {
+        e = new MonthlySalaryEmployee (...) ;
+    } else {
+        e = new HourlySalaryEmployee (...) ;
+    }
+
+// Syntax:
+    Hvis det er fredag, så instansier vores 'e' til at være af sub-klassen 'MonthlySalaryEmployee',
+    hvis ikke så instansier 'e' til at være 'MonthlySalaryEmployee'.
+
+// Svar:
+    Dette vil sige at hvis programmet køres på en *onsdag* vil følgende gøre sige gældene:
+
+    Ved *compile time* den vil den statiske type være 'Employee'.
+
+    Under *runtime*, vil dens dynamiske type være 'HourlySalaryEmployee'.
+
+Opgave 2.4)
+___________________________________________________________________________________________________
+
+    Nu hvor at vi har etableret at dens dynamiske type er 'HourlySalaryEmployee' i opgave 2.3),
+    vil display()-metoden blive kørt fra subklassen 'HourlySalaryEmployee'
+    (eftersom at vi har @Override'et vores superklasses display()-metode).

@@ -1,0 +1,49 @@
+3.1)
+For at give et image at den mentale kode jeg har i hovedet,
+vil jeg ville beskrive flowet.
+
+// Programmet
+Brugeren skriver et filnavn ind i konsolen som metoden skal finde,
+samt derefter skrive dataen ind i filen på.
+
+Så hvis brugeren skriver et filnavn ind i konsolen som IKKE findes
+bliver de mødt med en UNCHECKED EXCEPTION, eftersom brugeren selv
+skal skrive filnavnet ind og systemet checker om den pågældende fil
+er deri.
+
+
+// svar
+unchecked exception.
+
+3.2)
+// svar
+Checked exception, så fejlen for bogstaver bliver fanget lige med
+det samme, fremfor efter, da de har brugt tid på at svare.
+
+3.3)
+try{
+    // some code
+} catch (Exception e) {
+    System.out.println("The program encountered an exception.");
+} catch (FileSystemException e) {
+    System.out.println ("You do not have access to this file.");
+}
+// Exception e
+Så hvis det er en tilfældig exception vi fanger,
+såsom ArrayOutOfBoundsException mm, så kan vi ikke se specifikt hvilken
+exception vi fanger. Vi bliver derimod mødt med en MEGET generaliseret
+besked som vi selv har indtastet.
+
+Så løsningen til dette ville være at skrive:
+System.out.println(e.getMessage());
+Så vi også kan pinpointe hvor fejlen ligger.
+
+// FileSystemException e
+Fanger vi istedet en FileSystemException, er den mere specificeret,
+hvilket er god kodning. Det ville ikke være forkert at linjen printer en
+string, eftersom den printer det vi (nok) vil have.
+
+Dog, ville vi stadig skrive:
+e.getMessage();
+da hvis vi i fremtiden skal skrive noget andet i stedet for den nuværende string,
+så skal vi ændre i koden flere steder, frem for blot en (i FileSystemException-klassen).
